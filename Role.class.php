@@ -19,7 +19,6 @@ class Role {
 
 	// boolean method - returns true if user exists
 	public static function checkExists($name) {
-		error_log("Role checkExists = " . $name);
 		return self::getRoleId($name) > 0;
 	}
 
@@ -29,9 +28,6 @@ class Role {
 			throw new Exception("Empty role name!", 1);
 		}
 		self::initDatabase();
-		// if (self::$db_handle === FALSE || is_null(self::$db_handle)) {
-		// 	throw new Exception("Role db not initiated", 1);
-		// }
 		$id = 0;
 		while (($roles = fgetcsv(self::$db_handle, 1000, ',')) !== FALSE) {
 			if ($name === $roles[1]) {

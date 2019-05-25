@@ -2,8 +2,8 @@
 
 require_once __DIR__ . '/autoload.php';
 
-// actions performed
 /*
+actions that can be performed
 1. assign role to user
 2. remove role from user
 3. check access to resource for a user
@@ -17,19 +17,17 @@ if(trim($line) === '0'){
     echo "ABORTING!\n";
     exit;
 }
-// error_log("line = " . $line);
+
 switch ($line) {
 	case 1:
-		//get inputs and add role
 		$inputs = getInputsAndSanitize();
-		//go into the core logic. now add role to user in UserRole
+		//add role to user
 		$userRole = new UserRole($inputs['user_id'], $inputs['role_id']);
 		echo $userRole->addRoleToUser();
 		break;
 	case 2:
-		// get inputs and delete role
 		$inputs = getInputsAndSanitize();
-		// business logic. now delete role from user in UserRole
+		// delete role from user
 		$userRole = new UserRole($inputs['user_id'], $inputs['role_id']);
 		echo $userRole->deleteRoleFromUser();
 		break;
@@ -38,8 +36,7 @@ switch ($line) {
 		$inputs = getInputsAndSanitize(true);
 		break;
 	default:
-		# code...
-		echo "hello!";
+		echo "hello! i'm not an option ;)";
 		break;
 }
 
@@ -59,15 +56,11 @@ function getInputsAndSanitize($authorize = false) {
 	}
 
 	$role_name = sanitize(readline('Enter role you want to add/delete [devops,teamlead,dev,intern]:'));
-	error_log("sanitized inouts = " . $user_email . " / " . $role_name);
-	
 	$roleid = Role::getRoleId($role_name);
-	
 	if (!$roleid) {
 		echo "role not registered in the system\n";
 		exit;
 	}
-	error_log("sanitized successfully");
 	return array('user_id' => $userid, 'role_id' => $roleid);
 }
 
@@ -75,18 +68,15 @@ function authorizeUserAction($user_id) {
 	//get resource name, action type and print result
 	$resource_name = sanitize(readline('Enter the resource to be accessed [proddb,stagingdb,devdb,readreplica]:'));
 	$resource_id = Resource::getResourceId($resource_name);
-	error_log("resource_id = " . $resource_id . " / " . $resource_name);
 	$action = sanitize(readline('Enter the action to be performed [read,write,delete]:'));
 	$actiontype_id = ActionType::getActionTypeId($action);
-	error_log("actiontype_id = " . $actiontype_id . " / " . $action);
 	if (!$resource_id || !$actiontype_id) {
-		throw new Exception("invalid action type or resource", 1);
+		throw new Exception("\ninvalid action type or resource", 1);
 	}
 	$user_roles = UserRole::getRolesByUser($user_id);
-	error_log("user_roles = " . json_encode($user_roles));
 	foreach ($user_roles as $role) {
 		if (ResourceAccess::validate($role, $resource_id, $actiontype_id)) {
-			return "user has access to perform the action\n";
+			return "\nuser has access to perform the action\n";
 		}
 	}
 	return "===sorry no access===\n";
