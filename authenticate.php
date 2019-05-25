@@ -20,20 +20,18 @@ if(trim($line) === '0'){
 
 switch ($line) {
 	case 1:
-		$inputs = getInputsAndSanitize();
 		//add role to user
-		$userRole = new UserRole($inputs['user_id'], $inputs['role_id']);
+		$userRole = new UserRole(getUserIdFromInput(), getRoleIdFromInput());
 		echo $userRole->addRoleToUser();
 		break;
 	case 2:
-		$inputs = getInputsAndSanitize();
 		// delete role from user
-		$userRole = new UserRole($inputs['user_id'], $inputs['role_id']);
+		$userRole = new UserRole(getUserIdFromInput(), getRoleIdFromInput());
 		echo $userRole->deleteRoleFromUser();
 		break;
 	case 3:
 		//get email, resource, actiontype
-		$inputs = getInputsAndSanitize(true);
+		echo authorizeUserAction(getUserIdFromInput());
 		break;
 	default:
 		echo "hello! i'm not an option ;)";
@@ -42,26 +40,24 @@ switch ($line) {
 
 echo "\n\nThank you for the opportunity\n";
 
-function getInputsAndSanitize($authorize = false) {
+function getUserIdFromInput() {
 	$user_email = sanitize(readline('Enter user email:'), 'email');
 	$userid = User::getUserId($user_email);
 	if (!$userid) {
-		echo "user not in the system\n";
+		echo "user not registered in the system\n";
 		exit;
 	}
+	return $userid;
+}
 
-	if ($authorize) {
-		echo authorizeUserAction($userid);
-		exit;
-	}
-
+function getRoleIdFromInput() {
 	$role_name = sanitize(readline('Enter role you want to add/delete [devops,teamlead,dev,intern]:'));
 	$roleid = Role::getRoleId($role_name);
 	if (!$roleid) {
 		echo "role not registered in the system\n";
 		exit;
 	}
-	return array('user_id' => $userid, 'role_id' => $roleid);
+	return $roleid;
 }
 
 function authorizeUserAction($user_id) {

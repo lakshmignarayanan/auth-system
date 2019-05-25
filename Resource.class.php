@@ -28,12 +28,9 @@ class Resource {
 			throw new Exception("Empty resource name!", 1);
 		}
 		self::initDatabase();
-		// if (self::$db_handle === FALSE || is_null(self::$db_handle)) {
-		// 	throw new Exception("Role db not initiated", 1);
-		// }
+		
 		$id = 0;
 		while (($resources = fgetcsv(self::$db_handle, 1000, ',')) !== FALSE) {
-			error_log("name = " . $name . " resource = " . $resources[1]);
 			if ($name === $resources[1]) {
 				$id = $resources[0];
 				break;
