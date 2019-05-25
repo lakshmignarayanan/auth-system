@@ -16,3 +16,11 @@ Assumption:
 1. All roles have read access to readreplica.
 2. Access to resources by other roles can be viewed in /database/role_resource_actiontype.csv
 
+Important files to look at:
+1. All the User/Role logic is handled in their respective class files.
+2. ResourceAccess class handles the logic of validating the access to a user over a specific resource.
+3. CSV databases are stored in `/database` folder.
+
+Model:
+1. user-role maintains a 1-many relationship.
+2. role-resource-actiontype maintains a many-many relationships between. A role can have any number of actiontypes on any number of resources.
