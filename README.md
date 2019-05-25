@@ -7,6 +7,14 @@ Currently the system has:
 3. Roles [devops,teamlead,dev,intern]
 4. Users [lucky@gmail.com,shobana@outlook.com,vengat@hotmail.com]
 
+Technologies used:
+1. PHP
+2. OOPS
+3. CSV files as database
+
+How to run:
+run the php file authorize.php in your command line.
+
 Functionalities:
 1. Assign role to an user
 2. Remove role from an user
@@ -21,6 +29,6 @@ Important files to look at:
 2. ResourceAccess class handles the logic of validating the access to a user over a specific resource.
 3. CSV databases are stored in `/database` folder.
 
-Model:
+Model relationships:
 1. user-role maintains a 1-many relationship.
 2. role-resource-actiontype maintains a many-many relationships between. A role can have any number of actiontypes on any number of resources.
